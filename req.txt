@@ -1,6 +1,6 @@
-<<<<<<< HEAD
-using python
-=======
+
+
+
 
 langchain 
 langchain-community
@@ -12,4 +12,3 @@ dotenv
 chromadb
 tiktoken
 pydantic
->>>>>>> 524cb7d3a0868eb638c0e8a5a27684f0e1ed108c
