@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Learning Assistant – Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="dashboard.css">
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-title">
+        <div class="sidebar-logo">AI</div>
+        <div class="sidebar-title-text">
+          <span>Learning Assistant</span>
+          <span>Gemini-powered study hub</span>
+        </div>
+      </div>
+
+      <div class="sidebar-section-label">Main</div>
+      <nav class="sidebar-nav" id="sidebarNav">
+        <div class="nav-item active" data-view="dashboard">
+          <span class="icon">🏠</span>
+          <span class="nav-label">Dashboard</span>
+        </div>
+        <div class="nav-item" data-view="documents">
+          <span class="icon">📄</span>
+          <span class="nav-label">Documents</span>
+        </div>
+        <div class="nav-item" data-view="chat">
+          <span class="icon">💬</span>
+          <span class="nav-label">AI Chat</span>
+        </div>
+        <div class="nav-item" data-view="flashcards">
+          <span class="icon">🃏</span>
+          <span class="nav-label">Flashcards</span>
+        </div>
+        <div class="nav-item" data-view="quizzes">
+          <span class="icon">📝</span>
+          <span class="nav-label">Quizzes</span>
+        </div>
+        <div class="nav-item" data-view="analytics">
+          <span class="icon">📊</span>
+          <span class="nav-label">Analytics</span>
+        </div>
+      </nav>
+
+      <div class="sidebar-section-label">Session</div>
+      <div class="sidebar-footer">
+        <div class="pill">
+          <span>Adaptive learning</span>
+          <span class="badge">On</span>
+        </div>
+        <div class="pill">
+          <span>Today’s focus</span>
+          <span style="font-size:0.7rem;color:#a5b4fc;">Algorithms</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main">
+      <!-- Top bar -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="search-box">
+            <span style="font-size:0.85rem;color:var(--text-muted);">🔍</span>
+            <input placeholder="Search documents, topics, quizzes, or flashcards…" />
+          </div>
+          <div class="chip">
+            <span>🎯 Focus mode</span>
+            <span style="width:8px;height:8px;border-radius:999px;background:#22c55e;"></span>
+          </div>
+        </div>
+        <div class="topbar-right">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <button class="icon-btn" title="Toggle theme" id="themeToggleBtn">☾</button>
+          <div class="avatar">SB</div>
+        </div>
+      </header>
+
+      <!-- Page header (title changes via JS) -->
+      <div class="page-header">
+        <div class="page-title">
+          <h1 id="pageTitle">Dashboard</h1>
+          <span id="pageSubtitle">Track your learning progress, recent activity, and AI-generated study materials.</span>
+        </div>
+        <div class="page-actions">
+          <button class="btn-ghost">⏱ Track session</button>
+          <button class="btn-primary">➕ Upload new PDF</button>
+        </div>
+      </div>
+
+      <!-- DASHBOARD VIEW -->
+      <section class="view-section active" id="view-dashboard">
+        <div class="content-grid">
+          <div>
+            <!-- Stats cards -->
+            <section class="stats-grid">
+              <div class="stat-card">
+                <div class="stat-label">
+                  <span>Study time (today)</span>
+                  <span class="stat-trend">+0.8h</span>
+                </div>
+                <div class="stat-value"><span>1.7h</span></div>
+                <div class="card-subtitle">Daily goal · 2h</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">
+                  <span>Quizzes completed</span>
+                  <span class="stat-trend">+2</span>
+                </div>
+                <div class="stat-value"><span>5</span></div>
+                <div class="card-subtitle">Avg score · 82%</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">
+                  <span>Flashcards reviewed</span>
+                  <span class="stat-trend">+18</span>
+                </div>
+                <div class="stat-value"><span>54</span></div>
+                <div class="card-subtitle">10 marked favorite</div>
+              </div>
+              <div class="stat-card">
+                <div class="stat-label">
+                  <span>Documents processed</span>
+                  <span class="stat-trend">+1</span>
+                </div>
+                <div class="stat-value"><span>12</span></div>
+                <div class="card-subtitle">3 this week</div>
+              </div>
+            </section>
+
+            <!-- Quick actions -->
+            <section class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Quick actions</div>
+                  <div class="card-subtitle">
+                    Start a new AI-assisted study session in one click.
+                  </div>
+                </div>
+              </div>
+              <div class="quick-actions">
+                <div class="quick-card" data-open="documents">
+                  <div class="quick-label">📄 Upload PDF & generate study pack</div>
+                  <div class="quick-desc">
+                    Transform a chapter or paper into summaries, flashcards, and a quiz.
+                  </div>
+                </div>
+                <div class="quick-card" data-open="chat">
+                  <div class="quick-label">💬 Chat with a document</div>
+                  <div class="quick-desc">
+                    Ask questions and get Gemini-powered answers grounded in your PDF.
+                  </div>
+                </div>
+                <div class="quick-card" data-open="flashcards">
+                  <div class="quick-label">🃏 Review flashcards</div>
+                  <div class="quick-desc">
+                    Continue your flashcard deck with spaced repetition suggestions.
+                  </div>
+                </div>
+                <div class="quick-card" data-open="quizzes">
+                  <div class="quick-label">📝 Take an adaptive quiz</div>
+                  <div class="quick-desc">
+                    Generate a multiple-choice quiz tailored to your weak areas.
+                  </div>
+                </div>
+                <div class="quick-card" data-open="analytics">
+                  <div class="quick-label">📊 View detailed analytics</div>
+                  <div class="quick-desc">
+                    Inspect your scores, time spent, and concept mastery trends.
+                  </div>
+                </div>
+                <div class="quick-card" data-open="flashcards">
+                  <div class="quick-label">⭐ Review favorites</div>
+                  <div class="quick-desc">
+                    Quickly revise your starred flashcards and key questions.
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- Right: current session panel -->
+          <aside>
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <div class="card-title">Current session</div>
+                  <div class="card-subtitle">AI-guided study in progress.</div>
+                </div>
+              </div>
+              <div style="font-size:0.8rem;margin-bottom:6px;">
+                Data Structures – Trees · Mode: PDF chat & flashcards · 24 cards · 12 quiz questions.
+              </div>
+              <div class="progress-bar">
+                <div class="progress-fill"></div>
+              </div>
+              <div class="session-meta" style="display:flex;justify-content:space-between;font-size:0.75rem;color:var(--text-muted);margin-top:4px;">
+                <span>Progress 48%</span>
+                <span>Est. 15 min left</span>
+              </div>
+              <div class="session-actions" style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+                <button class="btn-primary" style="padding:7px 12px;font-size:0.8rem;">▶ Resume</button>
+                <button class="btn-ghost" style="padding:7px 12px;font-size:0.8rem;">Change document</button>
+              </div>
+              <div style="font-size:0.76rem;color:var(--text-muted);margin-top:4px;">
+                Tip: when you finish this session, you’ll unlock a review quiz and spaced repetition plan.
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- DOCUMENTS VIEW (PDF → Summary etc.) -->
+      <section class="view-section" id="view-documents">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Documents workspace</div>
+              <div class="card-subtitle">Upload PDFs and generate summaries, flashcards, and quizzes.</div>
+            </div>
+          </div>
+          <div class="upload-area">
+            <div class="upload-icon">📤</div>
+            <div class="upload-title">Drop PDF here</div>
+            <div class="upload-sub" id="uploadStatus">
+              Your content stays private. The AI will extract summaries and key concepts.
+            </div>
+            <label for="fileInput" class="upload-cta">
+              <span>Choose file</span> <span>↗</span>
+            </label>
+            <input id="fileInput" type="file" accept=".pdf" />
+          </div>
+
+          <div class="ai-output">
+            <div class="output-box">
+              <div class="output-title">AI Summary (demo)</div>
+              <p id="summaryBox">
+                Upload a document to see a placeholder summary here. Later you can connect your backend to stream real AI output.
+              </p>
+            </div>
+            <div class="output-actions">
+              <button class="pill-btn pill-btn--green" type="button" id="toFlashcardsBtn">
+                <span>⚡</span> To Flashcards
+              </button>
+              <button class="pill-btn pill-btn--purple" type="button" id="toQuizBtn">
+                <span>🧠</span> To Quiz
+              </button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- CHAT VIEW -->
+      <section class="view-section" id="view-chat">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">AI Chat</div>
+              <div class="card-subtitle">Ask questions about your content or any topic.</div>
+            </div>
+          </div>
+          <div class="chat-area">
+            <div class="chat-log" id="chatLog">
+              <strong>AI:</strong> Ask me anything about algorithms, EVs, or your uploaded notes…
+            </div>
+            <div class="chat-input-row">
+              <textarea id="chatInput" placeholder="Type your question here…"></textarea>
+              <button class="chat-send-btn" type="button" id="chatSendBtn">Send</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- FLASHCARDS VIEW -->
+      <section class="view-section" id="view-flashcards">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Flashcards</div>
+              <div class="card-subtitle">Tap to flip and check your understanding.</div>
+            </div>
+          </div>
+          <div style="display:grid;gap:12px;">
+            <div style="display:flex;justify-content:center;align-items:center;padding:6px 0;">
+              <div class="flashcard" id="flashcard">
+                <div class="flashcard-face flashcard-front">
+                  <div>
+                    <div class="flashcard-text">
+                      What is Big O notation?
+                    </div>
+                    <div class="flashcard-hint">Click to flip · Front</div>
+                  </div>
+                </div>
+                <div class="flashcard-face flashcard-back">
+                  <div>
+                    <div class="flashcard-text">
+                      It describes how an algorithm’s running time or space grows with input size.
+                    </div>
+                    <div class="flashcard-hint">Click to flip · Back</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="card-soft">
+              <h4 style="font-size:0.85rem;margin-bottom:4px;">Deck overview</h4>
+              <p>24 cards · 6 due today · 3 starred for quick revision.</p>
+              <div class="audio-player" style="margin-top:8px;">
+                <button class="audio-play" type="button" aria-label="Play audio summary">▶</button>
+                <div class="audio-track">
+                  <div class="audio-fill"></div>
+                </div>
+                <div class="audio-time">00:42 / 02:10</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- QUIZZES VIEW -->
+      <section class="view-section" id="view-quizzes">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Quizzes</div>
+              <div class="card-subtitle">MCQ, true/false, and short answer (demo).</div>
+            </div>
+          </div>
+          <div class="quiz-card">
+            <div class="quiz-label">QUIZ · MCQ</div>
+            <div class="quiz-question">
+              Which complexity is faster as n grows large?
+            </div>
+            <div class="quiz-options" id="quizOptions">
+              <button class="quiz-option" type="button" data-correct="false">
+                <span>A.</span> O(n²)
+              </button>
+              <button class="quiz-option" type="button" data-correct="true">
+                <span>B.</span> O(log n)
+              </button>
+              <button class="quiz-option" type="button" data-correct="false">
+                <span>C.</span> O(n · log n²)
+              </button>
+              <button class="quiz-option" type="button" data-correct="false">
+                <span>D.</span> O(n!)
+              </button>
+            </div>
+            <div class="quiz-footer">
+              <span id="quizFeedback">Pick an answer</span>
+              <button class="quiz-btn" type="button" id="quizNextBtn">Next question →</button>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <!-- ANALYTICS VIEW -->
+      <section class="view-section" id="view-analytics">
+        <section class="card">
+          <div class="card-header">
+            <div>
+              <div class="card-title">Analytics</div>
+              <div class="card-subtitle">Simple placeholder for charts and progress.</div>
+            </div>
+          </div>
+          <p style="font-size:0.8rem;color:var(--text-muted);">
+            Here you can later embed real charts (e.g., using Chart.js or any library) for scores, time spent, and mastery by topic.
+          </p>
+        </section>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // Simple SPA-style view switching (no routing).[web:51][web:50]
+    const navItems = document.querySelectorAll('.nav-item');
+    const views = document.querySelectorAll('.view-section');
+    const titleEl = document.getElementById('pageTitle');
+    const subtitleEl = document.getElementById('pageSubtitle');
+
+    const titles = {
+      dashboard: ['Dashboard', 'Track your learning progress, recent activity, and AI-generated study materials.'],
+      documents: ['Documents', 'Upload PDFs and generate summaries, flashcards, and quizzes.'],
+      chat: ['AI Chat', 'Ask study questions and get AI explanations.'],
+      flashcards: ['Flashcards', 'Flip through concept cards generated from your notes.'],
+      quizzes: ['Quizzes', 'Practice with auto-generated questions and explanations.'],
+      analytics: ['Analytics', 'View your learning statistics and trends.']
+    };
+
+    function showView(name) {
+      views.forEach(v => {
+        v.classList.toggle('active', v.id === 'view-' + name);
+      });
+      navItems.forEach(n => {
+        n.classList.toggle('active', n.dataset.view === name);
+      });
+      const [t, s] = titles[name] || titles.dashboard;
+      titleEl.textContent = t;
+      subtitleEl.textContent = s;
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        showView(item.dataset.view);
+      });
+    });
+
+    // Quick-action cards open corresponding view
+    document.querySelectorAll('.quick-card[data-open]').forEach(card => {
+      card.addEventListener('click', () => {
+        const view = card.getAttribute('data-open');
+        showView(view);
+      });
+    });
+
+    // Theme toggle with localStorage.[web:47]
+    const themeBtn = document.getElementById('themeToggleBtn');
+    function applyTheme(mode) {
+      document.documentElement.dataset.theme = mode;
+      localStorage.setItem('ai-dashboard-theme', mode);
+      themeBtn.textContent = mode === 'dark' ? '☾' : '☀️';
+    }
+    (function initTheme() {
+      const saved = localStorage.getItem('ai-dashboard-theme');
+      if (saved === 'dark' || saved === 'light') {
+        applyTheme(saved);
+      } else if (window.matchMedia &&
+                 window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        applyTheme('dark');
+      } else {
+        applyTheme('dark');
+      }
+    })();
+    themeBtn.addEventListener('click', () => {
+      const current = document.documentElement.dataset.theme || 'dark';
+      applyTheme(current === 'dark' ? 'light' : 'dark');
+    });
+
+    // Flashcard flip
+    const flashcard = document.getElementById('flashcard');
+    if (flashcard) {
+      flashcard.addEventListener('click', () => {
+        flashcard.classList.toggle('is-flipped');
+      });
+    }
+
+    // Quiz interactions.[web:39][web:43]
+    const quizOptionsContainer = document.getElementById('quizOptions');
+    const quizFeedback = document.getElementById('quizFeedback');
+    if (quizOptionsContainer) {
+      quizOptionsContainer.addEventListener('click', (e) => {
+        const btn = e.target.closest('.quiz-option');
+        if (!btn) return;
+        quizOptionsContainer.querySelectorAll('.quiz-option').forEach(opt => {
+          opt.classList.remove('selected-correct', 'selected-wrong');
+        });
+        const isCorrect = btn.dataset.correct === 'true';
+        btn.classList.add(isCorrect ? 'selected-correct' : 'selected-wrong');
+        quizFeedback.textContent = isCorrect ? 'Correct 🎉' : 'Not quite, try again!';
+      });
+    }
+
+    document.getElementById('quizNextBtn')?.addEventListener('click', () => {
+      quizFeedback.textContent = 'Next question (demo only)…';
+    });
+
+    // File upload demo
+    const fileInput = document.getElementById('fileInput');
+    const uploadStatus = document.getElementById('uploadStatus');
+    const summaryBox = document.getElementById('summaryBox');
+    if (fileInput) {
+      fileInput.addEventListener('change', () => {
+        const file = fileInput.files[0];
+        if (!file) return;
+        uploadStatus.textContent = 'Loaded: ' + file.name + ' · (demo) AI will summarize this.';
+        summaryBox.textContent = 'This is a placeholder summary for "' + file.name +
+          '". Later, connect your backend to stream real AI summaries here.';
+      });
+    }
+
+    // Buttons to jump from documents → flashcards / quiz
+    document.getElementById('toFlashcardsBtn')?.addEventListener('click', () => {
+      showView('flashcards');
+    });
+    document.getElementById('toQuizBtn')?.addEventListener('click', () => {
+      showView('quizzes');
+    });
+
+    // AI Chat demo
+    const chatLog = document.getElementById('chatLog');
+    const chatInput = document.getElementById('chatInput');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    if (chatSendBtn) {
+      chatSendBtn.addEventListener('click', () => {
+        const text = chatInput.value.trim();
+        if (!text) return;
+        chatLog.innerHTML += '<br><br><strong>You:</strong> ' +
+          text.replace(/</g, '&lt;');
+        chatLog.innerHTML += '<br><strong>AI:</strong> (demo) This is where your Gemini answer would appear.';
+        chatInput.value = '';
+        chatLog.scrollTop = chatLog.scrollHeight;
+      });
+    }
+  </script>
+</body>
+</html>
