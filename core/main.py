@@ -10,6 +10,22 @@
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 from langchain_community.document_loaders import PyPDFLoader
+from dotenv import load_dotenv
+import os
+from youtube_transcript_api import YouTubeTranscriptApi
+from langchain_community.utilities import SerpAPIWrapper
+from langchain.chains import RetrievalQA
+from langchain_community.vectorstores import FAISS
+#from langchain.chains.summarize import load_summarize_chain
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.schema import Document
+from langchain_community.document_loaders import PyPDFLoader
+# from langchain_ollama import OllamaEmbeddings, ChatOllama       //// if adding local agent 
+from langchain_core.tools import tool
+from langchain_core.messages import HumanMessage
+from langchain_core.messages import AIMessage,ToolMessage
+import json
+from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 class pdf :
@@ -53,3 +69,76 @@ class pdf :
 
 
     ### interactive part starts
+
+
+
+
+
+# youtube summarizer 
+class YouTubeSummarizer:
+
+    def __init__(self, url):
+        self.url = url
+        self.video_id = self.extract_video_id()
+        self.docs = None
+
+
+    def extract_video_id(self):
+
+        # works for https://www.youtube.com/watch?v=VIDEO_ID
+        return self.url.split("v=")[-1]
+
+
+    def get_transcript(self):
+
+        transcript = YouTubeTranscriptApi.get_transcript(self.video_id)
+
+        text = " ".join([t["text"] for t in transcript])
+
+        self.docs = [Document(page_content=text)]
+
+        return self.docs
+
+
+    def split_text(self):
+
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1200,
+            chunk_overlap=200
+        )
+
+        self.docs = splitter.split_documents(self.docs)
+
+        return self.docs
+
+
+    def summarize(self):
+
+        llm = ChatOpenAI(
+            model="gpt-4o-mini",
+            temperature=0
+        )
+
+        chain = load_summarize_chain(
+            llm,
+            chain_type="map_reduce"
+        )
+
+        summary = chain.run(self.docs)
+
+        return summary
+
+
+if __name__ == "__main__":
+
+    url = "https://www.youtube.com/watch?v=VIDEO_ID"
+
+    yt = YouTubeSummarizer(url)
+
+    yt.get_transcript()
+    yt.split_text()
+
+    result = yt.summarize()
+
+    print("\nSummary:\n")
+    print(result)
