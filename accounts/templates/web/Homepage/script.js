@@ -41,7 +41,7 @@ document.body.appendChild(modal);
 document.getElementById("closeLogin").onclick = function(){
 modal.remove();
 };
-
+ 
 
 // submit login
 document.getElementById("loginSubmit").onclick = function(){
@@ -49,8 +49,14 @@ document.getElementById("loginSubmit").onclick = function(){
 let email = document.getElementById("email").value;
 let password = document.getElementById("password").value;
 
-if(email === "" || password === ""){
-alert("Please enter email and password");
+let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+if(!emailPattern.test(email)){
+alert("Please enter a valid email");
+return;
+}
+if(password === ""){
+alert("Please enter apassword");
 return;
 }
 
