@@ -55,8 +55,8 @@ if(!emailPattern.test(email)){
 alert("Please enter a valid email");
 return;
 }
-if(password === ""){
-alert("Please enter apassword");
+if(password.length < 6){
+alert("Please enter a password with at least 6 characters");
 return;
 }
 
