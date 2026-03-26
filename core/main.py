@@ -27,6 +27,12 @@ from langchain_core.messages import AIMessage,ToolMessage
 import json
 from langchain_google_genai import ChatGoogleGenerativeAI, GoogleGenerativeAIEmbeddings
 
+from pypdf import PdfReader  # For PDF
+import pandas as pd          # For DataFrame
+from typing import List      # For type hints
+import time                  # For sleep
+
+
 #::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 class pdf :
 
@@ -142,3 +148,53 @@ if __name__ == "__main__":
 
     print("\nSummary:\n")
     print(result)
+
+
+class WebScraper:
+    """Web scraping for educational content"""
+    def __init__(self, timeout: int = 15):
+        self.timeout = timeout
+        self.headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+        }
+
+    def scrape_single_url(self, url: str) -> List[str]:
+        """Scrape one URL (HTML/PDF) - core from your notebook"""
+        try:
+            if url.lower().endswith('.pdf'):
+                resp = requests.get(url, stream=True, timeout=20, headers=self.headers)
+                resp.raise_for_status()  # ✅ ADD THIS: check HTTP errors
+                reader = PdfReader(resp.raw)
+                texts = []
+                for page in reader.pages:
+                    t = page.extract_text()
+                    if t and 60 < len(t) < 1000:
+                        texts.append(' '.join(t.split()))
+                return texts
+            else:
+                resp = requests.get(url, headers=self.headers, timeout=self.timeout)
+                resp.raise_for_status()  # ✅ ADD THIS: check HTTP errors
+                soup = BeautifulSoup(resp.text, 'html.parser')
+                # Clean: remove script/style/nav
+                for tag in soup(['script', 'style', 'nav', 'footer']):
+                    tag.decompose()
+                texts = []
+                for el in soup.find_all(['p', 'h1', 'h2', 'h3', 'li']):
+                    text = el.get_text(strip=True)
+                    if 60 < len(text) < 500:
+                        texts.append(text)
+                return texts
+        except Exception as e:
+            print(f"Scrape error for {url}: {e}")  # ✅ BETTER ERROR MSG
+            return []
+
+    def scrape_multiple(self, urls: List[str]) -> pd.DataFrame:
+        """Main method: Scrape list of URLs"""
+        records = []
+        for url in urls:
+            print(f"Scraping {url}")
+            texts = self.scrape_single_url(url)
+            for t in texts:
+                records.append({'text': t, 'url': url})
+            time.sleep(1.5)  # Rate limit
+        return pd.DataFrame(records)
