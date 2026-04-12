@@ -1,0 +1,3 @@
+https://www.w3schools.com/python/python_lists.asp ,
+https://www.jaided.ai/easyocr/documentation/ ,
+https://github.com/vivek-blenderlab ,
